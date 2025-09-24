@@ -211,38 +211,38 @@
           </div>
         </section>
 
-        <!-- Lifecycle demo -->
-        <section id="lifecycle-demo" class="scroll-mt-24">
-          <h2 class="text-lg font-semibold mb-4">Lifecycle Demo</h2>
-          <div
-            x-data="{ count: 0}"
-            x-init="
-            console.log('component is mounted with count=', count);
-            $watch('count' , (value)=>console.log('Watcher fired. New value =', value) )
-            "
-            class="space-y-3 bg-white border border-gray-200 rounded-xl p-4"
-          >
-            <p class="text-sm text-gray-600">
-              Count: <span x-text="count"></span>
-            </p>
+        <section id="scope-demo" class="scroll-mt-24">
+          <h2 class="text-lg font-semibold mb-4">Scope & Ownership Demo</h2>
 
-            <div class="flex gap-2">
+          <!-- Root component -->
+          <div
+            x-data="{count: 0 , user:'Eslam'}"
+            x-init="console.log($data)"
+            class="bg-white border border-gray-200 rounded-xl p-4 space-y-4"
+          >
+            <p class="text-sm">Root user: <span x-text="user"></span></p>
+            <button
+              @click="count++"
+              class="px-4 py-2 bg-indigo-600 text-white rounded-lg"
+            >
+              Root count: <span x-text="count++"></span>
+            </button>
+
+            <!-- Ref demo -->
+            <div class="space-y-2">
+              <input
+                type="text"
+                placeholder="Type your name"
+                class="border rounded px-2 py-1 w-full"
+                x-ref="nameInput"
+              />
               <button
-                @click="count++"
-                class="px-4 py-2 bg-indigo-600 text-white rounded-lg"
+                class="px-3 py-1 bg-gray-200 rounded"
+                @click="$refs.nameInput.focus()"
               >
-                Increment
-              </button>
-              <button
-                @click="count--"
-                class="px-4 py-2 bg-white border rounded-lg"
-              >
-                Decrement
+                Focus input via $refs
               </button>
             </div>
-
-            <!-- Effect -->
-            <div x-effect="console.log('Effect ran, count =', count)"></div>
           </div>
         </section>
 
