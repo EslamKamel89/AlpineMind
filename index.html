@@ -1,364 +1,680 @@
 <!DOCTYPE html>
 <html lang="en">
-<head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>P0 — UI Starter Kit (Tailwind-only)</title>
-  <!-- Tailwind CDN (no build step; fine for prototypes) -->
-  <script src="https://cdn.tailwindcss.com"></script>
-  <style>
-    /* Minimal utility extras (no JS): skeleton shimmer */
-    .skeleton {
-      position: relative;
-      overflow: hidden;
-      background: rgb(229 231 235);
-    }
-    .skeleton::after {
-      content: "";
-      position: absolute;
-      inset: 0;
-      transform: translateX(-100%);
-      background: linear-gradient(90deg, rgba(229,231,235,0) 0%, rgba(156,163,175,0.25) 50%, rgba(229,231,235,0) 100%);
-      animation: shimmer 1.6s infinite;
-    }
-    @keyframes shimmer {
-      100% { transform: translateX(100%); }
-    }
-    /* Hide elements meant to be initialized later (e.g., dialog) */
-    .hidden-important { display: none !important; }
-  </style>
-</head>
-<body class="min-h-screen bg-gray-50 text-gray-900">
-  <!-- App Shell -->
-  <header class="sticky top-0 z-40 bg-white/80 backdrop-blur border-b border-gray-200">
-    <div class="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 h-16 flex items-center justify-between">
-      <div class="flex items-center gap-2">
-        <div class="h-8 w-8 rounded-lg bg-indigo-600"></div>
-        <span class="font-semibold">Alpine Advanced — UI Kit</span>
-      </div>
-      <nav class="hidden md:flex items-center gap-6 text-sm">
-        <a href="#forms" class="hover:text-indigo-600">Forms</a>
-        <a href="#navigation" class="hover:text-indigo-600">Navigation</a>
-        <a href="#feedback" class="hover:text-indigo-600">Feedback</a>
-        <a href="#data" class="hover:text-indigo-600">Data</a>
-        <a href="#overlays" class="hover:text-indigo-600">Overlays</a>
-      </nav>
-      <div class="flex items-center gap-2">
-        <button class="inline-flex items-center gap-2 rounded-lg border border-gray-200 px-3 py-1.5 text-sm hover:bg-gray-100">
-          <span class="i">🌙</span><span>Theme</span>
-        </button>
-        <img alt="avatar" class="h-8 w-8 rounded-full ring-2 ring-white" src="https://avatars.githubusercontent.com/u/9919?s=80&v=4"/>
-      </div>
-    </div>
-  </header>
-
-  <div class="mx-auto max-w-7xl grid grid-cols-1 lg:grid-cols-[16rem,1fr] gap-6 px-4 sm:px-6 lg:px-8 mt-6">
-    <!-- Sidebar -->
-    <aside class="bg-white border border-gray-200 rounded-xl p-4 h-fit">
-      <h2 class="text-sm font-semibold text-gray-700 mb-3">Components</h2>
-      <ul class="space-y-1 text-sm">
-        <li><a class="block rounded px-2 py-1 hover:bg-gray-100" href="#buttons">Buttons</a></li>
-        <li><a class="block rounded px-2 py-1 hover:bg-gray-100" href="#forms">Forms</a></li>
-        <li><a class="block rounded px-2 py-1 hover:bg-gray-100" href="#tabs">Tabs</a></li>
-        <li><a class="block rounded px-2 py-1 hover:bg-gray-100" href="#dropdown">Dropdown</a></li>
-        <li><a class="block rounded px-2 py-1 hover:bg-gray-100" href="#cards">Cards</a></li>
-        <li><a class="block rounded px-2 py-1 hover:bg-gray-100" href="#table">Table</a></li>
-        <li><a class="block rounded px-2 py-1 hover:bg-gray-100" href="#alerts">Alerts</a></li>
-        <li><a class="block rounded px-2 py-1 hover:bg-gray-100" href="#toasts">Toast Area</a></li>
-        <li><a class="block rounded px-2 py-1 hover:bg-gray-100" href="#skeletons">Skeletons</a></li>
-        <li><a class="block rounded px-2 py-1 hover:bg-gray-100" href="#accordions">Accordions</a></li>
-        <li><a class="block rounded px-2 py-1 hover:bg-gray-100" href="#breadcrumbs">Breadcrumbs</a></li>
-        <li><a class="block rounded px-2 py-1 hover:bg-gray-100" href="#modals">Modal (static)</a></li>
-        <li><a class="block rounded px-2 py-1 hover:bg-gray-100" href="#drawers">Drawer (static)</a></li>
-      </ul>
-    </aside>
-
-    <!-- Main content -->
-    <main class="space-y-12 pb-20">
-      <!-- Buttons -->
-      <section id="buttons" class="scroll-mt-24">
-        <h2 class="text-lg font-semibold mb-4">Buttons</h2>
-        <div class="flex flex-wrap gap-2">
-          <button class="px-4 py-2 rounded-lg bg-indigo-600 text-white hover:bg-indigo-700">Primary</button>
-          <button class="px-4 py-2 rounded-lg bg-white border border-gray-200 hover:bg-gray-50">Secondary</button>
-          <button class="px-4 py-2 rounded-lg bg-emerald-600 text-white hover:bg-emerald-700">Success</button>
-          <button class="px-4 py-2 rounded-lg bg-rose-600 text-white hover:bg-rose-700">Danger</button>
-          <button class="px-4 py-2 rounded-lg bg-amber-500 text-white hover:bg-amber-600">Warning</button>
-          <button class="px-3 py-1.5 rounded-lg bg-white border border-gray-200 text-sm">Small</button>
-          <button class="px-5 py-2.5 rounded-lg bg-white border border-gray-200 text-base">Large</button>
-          <button class="px-4 py-2 rounded-lg bg-white border border-gray-200 inline-flex items-center gap-2">
-            <span>🔍</span><span>With Icon</span>
-          </button>
-          <button class="px-4 py-2 rounded-lg bg-white border border-gray-200 disabled:opacity-50" disabled>Disabled</button>
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>P0 — UI Starter Kit (Tailwind-only)</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+      .skeleton {
+        position: relative;
+        overflow: hidden;
+        background: rgb(229 231 235);
+      }
+      .skeleton::after {
+        content: "";
+        position: absolute;
+        inset: 0;
+        transform: translateX(-100%);
+        background: linear-gradient(
+          90deg,
+          rgba(229, 231, 235, 0) 0%,
+          rgba(156, 163, 175, 0.25) 50%,
+          rgba(229, 231, 235, 0) 100%
+        );
+        animation: shimmer 1.6s infinite;
+      }
+      @keyframes shimmer {
+        100% {
+          transform: translateX(100%);
+        }
+      }
+      /* Hide elements meant to be initialized later (e.g., dialog) */
+      .hidden-important {
+        display: none !important;
+      }
+    </style>
+    <script
+      defer
+      src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js"
+    ></script>
+  </head>
+  <body class="min-h-screen bg-gray-50 text-gray-900">
+    <!-- App Shell -->
+    <header
+      class="sticky top-0 z-40 bg-white/80 backdrop-blur border-b border-gray-200"
+    >
+      <div
+        class="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 h-16 flex items-center justify-between"
+      >
+        <div class="flex items-center gap-2">
+          <div class="h-8 w-8 rounded-lg bg-indigo-600"></div>
+          <span class="font-semibold">Alpine Advanced — UI Kit</span>
         </div>
-      </section>
+        <nav class="hidden md:flex items-center gap-6 text-sm">
+          <a href="#forms" class="hover:text-indigo-600">Forms</a>
+          <a href="#navigation" class="hover:text-indigo-600">Navigation</a>
+          <a href="#feedback" class="hover:text-indigo-600">Feedback</a>
+          <a href="#data" class="hover:text-indigo-600">Data</a>
+          <a href="#overlays" class="hover:text-indigo-600">Overlays</a>
+        </nav>
+        <div class="flex items-center gap-2">
+          <button
+            class="inline-flex items-center gap-2 rounded-lg border border-gray-200 px-3 py-1.5 text-sm hover:bg-gray-100"
+          >
+            <span class="i">🌙</span><span>Theme</span>
+          </button>
+          <img
+            alt="avatar"
+            class="h-8 w-8 rounded-full ring-2 ring-white"
+            src="https://avatars.githubusercontent.com/u/9919?s=80&v=4"
+          />
+        </div>
+      </div>
+    </header>
 
-      <!-- Forms -->
-      <section id="forms" class="scroll-mt-24">
-        <h2 class="text-lg font-semibold mb-4">Forms</h2>
-        <div class="grid md:grid-cols-2 gap-6">
-          <div class="bg-white border border-gray-200 rounded-xl p-4 space-y-4">
-            <div>
-              <label class="block text-sm font-medium mb-1">Email</label>
-              <input type="email" class="w-full rounded-lg border-gray-300 focus:border-indigo-500 focus:ring-indigo-500" placeholder="you@example.com"/>
+    <div
+      class="mx-auto max-w-7xl grid grid-cols-1 lg:grid-cols-[16rem,1fr] gap-6 px-4 sm:px-6 lg:px-8 mt-6"
+    >
+      <!-- Sidebar -->
+      <aside class="bg-white border border-gray-200 rounded-xl p-4 h-fit">
+        <h2 class="text-sm font-semibold text-gray-700 mb-3">Components</h2>
+        <ul class="space-y-1 text-sm">
+          <li>
+            <a class="block rounded px-2 py-1 hover:bg-gray-100" href="#buttons"
+              >Buttons</a
+            >
+          </li>
+          <li>
+            <a class="block rounded px-2 py-1 hover:bg-gray-100" href="#forms"
+              >Forms</a
+            >
+          </li>
+          <li>
+            <a class="block rounded px-2 py-1 hover:bg-gray-100" href="#tabs"
+              >Tabs</a
+            >
+          </li>
+          <li>
+            <a
+              class="block rounded px-2 py-1 hover:bg-gray-100"
+              href="#dropdown"
+              >Dropdown</a
+            >
+          </li>
+          <li>
+            <a class="block rounded px-2 py-1 hover:bg-gray-100" href="#cards"
+              >Cards</a
+            >
+          </li>
+          <li>
+            <a class="block rounded px-2 py-1 hover:bg-gray-100" href="#table"
+              >Table</a
+            >
+          </li>
+          <li>
+            <a class="block rounded px-2 py-1 hover:bg-gray-100" href="#alerts"
+              >Alerts</a
+            >
+          </li>
+          <li>
+            <a class="block rounded px-2 py-1 hover:bg-gray-100" href="#toasts"
+              >Toast Area</a
+            >
+          </li>
+          <li>
+            <a
+              class="block rounded px-2 py-1 hover:bg-gray-100"
+              href="#skeletons"
+              >Skeletons</a
+            >
+          </li>
+          <li>
+            <a
+              class="block rounded px-2 py-1 hover:bg-gray-100"
+              href="#accordions"
+              >Accordions</a
+            >
+          </li>
+          <li>
+            <a
+              class="block rounded px-2 py-1 hover:bg-gray-100"
+              href="#breadcrumbs"
+              >Breadcrumbs</a
+            >
+          </li>
+          <li>
+            <a class="block rounded px-2 py-1 hover:bg-gray-100" href="#modals"
+              >Modal (static)</a
+            >
+          </li>
+          <li>
+            <a class="block rounded px-2 py-1 hover:bg-gray-100" href="#drawers"
+              >Drawer (static)</a
+            >
+          </li>
+        </ul>
+      </aside>
+
+      <!-- Main content -->
+      <main class="space-y-12 pb-20">
+        <!-- Buttons -->
+        <section id="buttons" class="scroll-mt-24">
+          <h2 class="text-lg font-semibold mb-4">Buttons</h2>
+          <div class="flex flex-wrap gap-2">
+            <button
+              class="px-4 py-2 rounded-lg bg-indigo-600 text-white hover:bg-indigo-700"
+            >
+              Primary
+            </button>
+            <button
+              class="px-4 py-2 rounded-lg bg-white border border-gray-200 hover:bg-gray-50"
+            >
+              Secondary
+            </button>
+            <button
+              class="px-4 py-2 rounded-lg bg-emerald-600 text-white hover:bg-emerald-700"
+            >
+              Success
+            </button>
+            <button
+              class="px-4 py-2 rounded-lg bg-rose-600 text-white hover:bg-rose-700"
+            >
+              Danger
+            </button>
+            <button
+              class="px-4 py-2 rounded-lg bg-amber-500 text-white hover:bg-amber-600"
+            >
+              Warning
+            </button>
+            <button
+              class="px-3 py-1.5 rounded-lg bg-white border border-gray-200 text-sm"
+            >
+              Small
+            </button>
+            <button
+              class="px-5 py-2.5 rounded-lg bg-white border border-gray-200 text-base"
+            >
+              Large
+            </button>
+            <button
+              class="px-4 py-2 rounded-lg bg-white border border-gray-200 inline-flex items-center gap-2"
+            >
+              <span>🔍</span><span>With Icon</span>
+            </button>
+            <button
+              class="px-4 py-2 rounded-lg bg-white border border-gray-200 disabled:opacity-50"
+              disabled
+            >
+              Disabled
+            </button>
+          </div>
+        </section>
+
+        <!-- Lifecycle demo -->
+        <section id="lifecycle-demo" class="scroll-mt-24">
+          <h2 class="text-lg font-semibold mb-4">Lifecycle Demo</h2>
+          <div
+            x-data="{ count: 0}"
+            x-init="
+            console.log('component is mounted with count=', count);
+            $watch('count' , (value)=>console.log('Watcher fired. New value =', value) )
+            "
+            class="space-y-3 bg-white border border-gray-200 rounded-xl p-4"
+          >
+            <p class="text-sm text-gray-600">
+              Count: <span x-text="count"></span>
+            </p>
+
+            <div class="flex gap-2">
+              <button
+                @click="count++"
+                class="px-4 py-2 bg-indigo-600 text-white rounded-lg"
+              >
+                Increment
+              </button>
+              <button
+                @click="count--"
+                class="px-4 py-2 bg-white border rounded-lg"
+              >
+                Decrement
+              </button>
             </div>
-            <div>
-              <label class="block text-sm font-medium mb-1">Password</label>
-              <input type="password" class="w-full rounded-lg border-gray-300 focus:border-indigo-500 focus:ring-indigo-500" placeholder="••••••••"/>
-            </div>
-            <div class="flex items-center gap-2">
-              <input id="remember" type="checkbox" class="rounded border-gray-300 text-indigo-600 focus:ring-indigo-500">
-              <label for="remember" class="text-sm">Remember me</label>
-            </div>
-            <div class="grid grid-cols-2 gap-4">
+
+            <!-- Effect -->
+            <div x-effect="console.log('Effect ran, count =', count)"></div>
+          </div>
+        </section>
+
+        <!-- Forms -->
+        <section id="forms" class="scroll-mt-24">
+          <h2 class="text-lg font-semibold mb-4">Forms</h2>
+          <div class="grid md:grid-cols-2 gap-6">
+            <div
+              class="bg-white border border-gray-200 rounded-xl p-4 space-y-4"
+            >
               <div>
-                <label class="block text-sm font-medium mb-1">Country</label>
-                <select class="w-full rounded-lg border-gray-300 focus:border-indigo-500 focus:ring-indigo-500">
-                  <option>Egypt</option>
-                  <option>Saudi Arabia</option>
-                  <option>United Kingdom</option>
-                </select>
+                <label class="block text-sm font-medium mb-1">Email</label>
+                <input
+                  type="email"
+                  class="w-full rounded-lg border-gray-300 focus:border-indigo-500 focus:ring-indigo-500"
+                  placeholder="you@example.com"
+                />
               </div>
               <div>
-                <label class="block text-sm font-medium mb-1">Role</label>
-                <div class="flex items-center gap-4 text-sm">
-                  <label class="inline-flex items-center gap-2">
-                    <input type="radio" name="role" class="text-indigo-600 border-gray-300"> <span>Admin</span>
-                  </label>
-                  <label class="inline-flex items-center gap-2">
-                    <input type="radio" name="role" class="text-indigo-600 border-gray-300"> <span>User</span>
-                  </label>
+                <label class="block text-sm font-medium mb-1">Password</label>
+                <input
+                  type="password"
+                  class="w-full rounded-lg border-gray-300 focus:border-indigo-500 focus:ring-indigo-500"
+                  placeholder="••••••••"
+                />
+              </div>
+              <div class="flex items-center gap-2">
+                <input
+                  id="remember"
+                  type="checkbox"
+                  class="rounded border-gray-300 text-indigo-600 focus:ring-indigo-500"
+                />
+                <label for="remember" class="text-sm">Remember me</label>
+              </div>
+              <div class="grid grid-cols-2 gap-4">
+                <div>
+                  <label class="block text-sm font-medium mb-1">Country</label>
+                  <select
+                    class="w-full rounded-lg border-gray-300 focus:border-indigo-500 focus:ring-indigo-500"
+                  >
+                    <option>Egypt</option>
+                    <option>Saudi Arabia</option>
+                    <option>United Kingdom</option>
+                  </select>
+                </div>
+                <div>
+                  <label class="block text-sm font-medium mb-1">Role</label>
+                  <div class="flex items-center gap-4 text-sm">
+                    <label class="inline-flex items-center gap-2">
+                      <input
+                        type="radio"
+                        name="role"
+                        class="text-indigo-600 border-gray-300"
+                      />
+                      <span>Admin</span>
+                    </label>
+                    <label class="inline-flex items-center gap-2">
+                      <input
+                        type="radio"
+                        name="role"
+                        class="text-indigo-600 border-gray-300"
+                      />
+                      <span>User</span>
+                    </label>
+                  </div>
+                </div>
+              </div>
+              <div class="flex justify-end gap-2">
+                <button
+                  class="px-4 py-2 rounded-lg bg-white border border-gray-200"
+                >
+                  Cancel
+                </button>
+                <button class="px-4 py-2 rounded-lg bg-indigo-600 text-white">
+                  Save
+                </button>
+              </div>
+            </div>
+
+            <!-- Static search/filter toolbar -->
+            <div
+              class="bg-white border border-gray-200 rounded-xl p-4 space-y-4"
+            >
+              <div class="flex gap-2">
+                <input
+                  type="text"
+                  class="w-full rounded-lg border-gray-300 focus:border-indigo-500 focus:ring-indigo-500"
+                  placeholder="Search…"
+                />
+                <button
+                  class="px-4 py-2 rounded-lg bg-white border border-gray-200"
+                >
+                  Filter
+                </button>
+                <button
+                  class="px-4 py-2 rounded-lg bg-white border border-gray-200"
+                >
+                  Export
+                </button>
+              </div>
+              <div class="text-sm text-gray-500">
+                Filters and export will be wired up with Alpine later.
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <!-- Tabs (static) -->
+        <section id="tabs" class="scroll-mt-24">
+          <h2 class="text-lg font-semibold mb-4">Tabs (static)</h2>
+          <div class="bg-white border border-gray-200 rounded-xl">
+            <div class="flex gap-2 border-b border-gray-200 p-2">
+              <button class="px-3 py-2 rounded-lg bg-gray-100 text-sm">
+                General
+              </button>
+              <button class="px-3 py-2 rounded-lg hover:bg-gray-50 text-sm">
+                Security
+              </button>
+              <button class="px-3 py-2 rounded-lg hover:bg-gray-50 text-sm">
+                Billing
+              </button>
+            </div>
+            <div class="p-4 text-sm text-gray-600">
+              Tab panels will switch via Alpine later.
+            </div>
+          </div>
+        </section>
+
+        <!-- Dropdown (static) -->
+        <section id="dropdown" class="scroll-mt-24">
+          <h2 class="text-lg font-semibold mb-4">Dropdown (static)</h2>
+          <div class="relative inline-block">
+            <button
+              class="px-4 py-2 rounded-lg bg-white border border-gray-200"
+            >
+              Open menu
+            </button>
+            <div
+              class="absolute mt-2 w-48 rounded-lg border border-gray-200 bg-white shadow hidden-important"
+            >
+              <a class="block px-3 py-2 text-sm hover:bg-gray-50" href="#"
+                >Profile</a
+              >
+              <a class="block px-3 py-2 text-sm hover:bg-gray-50" href="#"
+                >Settings</a
+              >
+              <a
+                class="block px-3 py-2 text-sm hover:bg-gray-50 text-rose-600"
+                href="#"
+                >Sign out</a
+              >
+            </div>
+          </div>
+        </section>
+
+        <!-- Cards -->
+        <section id="cards" class="scroll-mt-24">
+          <h2 class="text-lg font-semibold mb-4">Cards</h2>
+          <div class="grid sm:grid-cols-2 lg:grid-cols-3 gap-6">
+            <div class="bg-white border border-gray-200 rounded-xl p-4">
+              <div class="text-sm text-gray-500">Revenue</div>
+              <div class="mt-2 text-2xl font-semibold">$12,340</div>
+              <div class="mt-3 text-xs text-emerald-600">
+                +8.4% from last week
+              </div>
+            </div>
+            <div class="bg-white border border-gray-200 rounded-xl p-4">
+              <div class="text-sm text-gray-500">Users</div>
+              <div class="mt-2 text-2xl font-semibold">1,284</div>
+              <div class="mt-3 text-xs text-gray-500">
+                Active users in last 24h
+              </div>
+            </div>
+            <div class="bg-white border border-gray-200 rounded-xl p-4">
+              <div class="text-sm text-gray-500">Conversion</div>
+              <div class="mt-2 text-2xl font-semibold">3.9%</div>
+              <div class="mt-3 text-xs text-rose-600">-0.4% from last week</div>
+            </div>
+          </div>
+        </section>
+
+        <!-- Table -->
+        <section id="table" class="scroll-mt-24">
+          <h2 class="text-lg font-semibold mb-4">Table</h2>
+          <div
+            class="bg-white border border-gray-200 rounded-xl overflow-hidden"
+          >
+            <table class="min-w-full text-sm">
+              <thead class="bg-gray-50 text-gray-600">
+                <tr>
+                  <th class="px-4 py-2 text-left font-medium">Name</th>
+                  <th class="px-4 py-2 text-left font-medium">Email</th>
+                  <th class="px-4 py-2 text-left font-medium">Role</th>
+                  <th class="px-4 py-2 text-left font-medium">Status</th>
+                  <th class="px-4 py-2"></th>
+                </tr>
+              </thead>
+              <tbody class="divide-y divide-gray-100">
+                <tr>
+                  <td class="px-4 py-2">Jane Doe</td>
+                  <td class="px-4 py-2">jane@example.com</td>
+                  <td class="px-4 py-2">Admin</td>
+                  <td class="px-4 py-2">
+                    <span
+                      class="inline-flex items-center px-2 py-0.5 rounded-full bg-emerald-100 text-emerald-700 text-xs"
+                      >Active</span
+                    >
+                  </td>
+                  <td class="px-4 py-2 text-right">
+                    <button
+                      class="px-3 py-1.5 rounded-lg bg-white border border-gray-200"
+                    >
+                      View
+                    </button>
+                  </td>
+                </tr>
+                <tr>
+                  <td class="px-4 py-2">John Smith</td>
+                  <td class="px-4 py-2">john@example.com</td>
+                  <td class="px-4 py-2">User</td>
+                  <td class="px-4 py-2">
+                    <span
+                      class="inline-flex items-center px-2 py-0.5 rounded-full bg-amber-100 text-amber-700 text-xs"
+                      >Pending</span
+                    >
+                  </td>
+                  <td class="px-4 py-2 text-right">
+                    <button
+                      class="px-3 py-1.5 rounded-lg bg-white border border-gray-200"
+                    >
+                      View
+                    </button>
+                  </td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </section>
+
+        <!-- Alerts -->
+        <section id="alerts" class="scroll-mt-24">
+          <h2 class="text-lg font-semibold mb-4">Alerts</h2>
+          <div class="space-y-3">
+            <div
+              class="rounded-lg border border-emerald-200 bg-emerald-50 px-4 py-3 text-emerald-800"
+            >
+              Success alert
+            </div>
+            <div
+              class="rounded-lg border border-amber-200 bg-amber-50 px-4 py-3 text-amber-800"
+            >
+              Warning alert
+            </div>
+            <div
+              class="rounded-lg border border-rose-200 bg-rose-50 px-4 py-3 text-rose-800"
+            >
+              Error alert
+            </div>
+            <div
+              class="rounded-lg border border-blue-200 bg-blue-50 px-4 py-3 text-blue-800"
+            >
+              Info alert
+            </div>
+          </div>
+        </section>
+
+        <!-- Toast Container (static placeholder) -->
+        <section id="toasts" class="scroll-mt-24">
+          <h2 class="text-lg font-semibold mb-4">Toast Area (static)</h2>
+          <div class="text-sm text-gray-600 mb-2">
+            This fixed container will receive toasts later via Alpine events.
+          </div>
+          <div
+            class="fixed bottom-4 right-4 space-y-2 w-80 pointer-events-none"
+          >
+            <!-- Example toast (static) -->
+            <div
+              class="pointer-events-auto rounded-lg border border-gray-200 bg-white shadow p-3"
+            >
+              <div class="text-sm font-medium">Saved successfully</div>
+              <div class="text-xs text-gray-500 mt-1">
+                We’ll dismiss this automatically with Alpine later.
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <!-- Skeletons -->
+        <section id="skeletons" class="scroll-mt-24">
+          <h2 class="text-lg font-semibold mb-4">Skeletons</h2>
+          <div class="grid sm:grid-cols-2 lg:grid-cols-3 gap-6">
+            <div class="rounded-xl border border-gray-200 p-4">
+              <div class="h-4 w-24 skeleton rounded"></div>
+              <div class="mt-3 h-7 w-32 skeleton rounded"></div>
+              <div class="mt-4 space-y-2">
+                <div class="h-3 w-full skeleton rounded"></div>
+                <div class="h-3 w-5/6 skeleton rounded"></div>
+                <div class="h-3 w-4/6 skeleton rounded"></div>
+              </div>
+            </div>
+            <div class="rounded-xl border border-gray-200 p-4">
+              <div class="h-4 w-20 skeleton rounded"></div>
+              <div class="mt-3 h-40 w-full skeleton rounded"></div>
+            </div>
+            <div class="rounded-xl border border-gray-200 p-4">
+              <div class="h-4 w-14 skeleton rounded"></div>
+              <div class="mt-3 h-3 w-4/6 skeleton rounded"></div>
+              <div class="mt-2 h-3 w-5/6 skeleton rounded"></div>
+              <div class="mt-2 h-3 w-3/6 skeleton rounded"></div>
+            </div>
+          </div>
+        </section>
+
+        <!-- Accordions (static) -->
+        <section id="accordions" class="scroll-mt-24">
+          <h2 class="text-lg font-semibold mb-4">Accordions (static)</h2>
+          <div
+            class="bg-white border border-gray-200 rounded-xl divide-y divide-gray-200"
+          >
+            <details class="group p-4">
+              <summary
+                class="cursor-pointer list-none flex items-center justify-between"
+              >
+                <span class="font-medium">What is this course?</span>
+                <span class="text-gray-400 group-open:rotate-180 transition"
+                  >▾</span
+                >
+              </summary>
+              <div class="mt-2 text-sm text-gray-600">
+                A project-based deep dive into Alpine.js over Tailwind markup.
+              </div>
+            </details>
+            <details class="group p-4">
+              <summary
+                class="cursor-pointer list-none flex items-center justify-between"
+              >
+                <span class="font-medium">Do I need a build step?</span>
+                <span class="text-gray-400 group-open:rotate-180 transition"
+                  >▾</span
+                >
+              </summary>
+              <div class="mt-2 text-sm text-gray-600">
+                No. We begin with CDN for speed, then you can adopt a build
+                later.
+              </div>
+            </details>
+          </div>
+        </section>
+
+        <!-- Breadcrumbs -->
+        <section id="breadcrumbs" class="scroll-mt-24">
+          <h2 class="text-lg font-semibold mb-4">Breadcrumbs</h2>
+          <nav class="text-sm">
+            <ol class="flex items-center gap-1 text-gray-600">
+              <li><a href="#" class="hover:text-indigo-600">Home</a></li>
+              <li>›</li>
+              <li><a href="#" class="hover:text-indigo-600">Library</a></li>
+              <li>›</li>
+              <li class="text-gray-900">Data</li>
+            </ol>
+          </nav>
+        </section>
+
+        <!-- Modals (static) -->
+        <section id="modals" class="scroll-mt-24">
+          <h2 class="text-lg font-semibold mb-4">Modal (static)</h2>
+          <div class="text-sm text-gray-600 mb-2">
+            Hidden by default; will be toggled later with Alpine.
+          </div>
+          <!-- Overlay + Dialog: initially hidden via .hidden-important -->
+          <div class="fixed inset-0 z-50 hidden-important" aria-hidden="true">
+            <div class="absolute inset-0 bg-black/40"></div>
+            <div class="absolute inset-0 flex items-center justify-center p-4">
+              <div
+                class="w-full max-w-lg rounded-xl bg-white shadow border border-gray-200 p-4"
+              >
+                <h3 class="text-lg font-semibold">Example Modal</h3>
+                <p class="text-sm text-gray-600 mt-1">
+                  We’ll wire open/close and focus trapping with Alpine.
+                </p>
+                <div class="mt-4 flex justify-end gap-2">
+                  <button
+                    class="px-4 py-2 rounded-lg bg-white border border-gray-200"
+                  >
+                    Cancel
+                  </button>
+                  <button class="px-4 py-2 rounded-lg bg-indigo-600 text-white">
+                    Confirm
+                  </button>
                 </div>
               </div>
             </div>
-            <div class="flex justify-end gap-2">
-              <button class="px-4 py-2 rounded-lg bg-white border border-gray-200">Cancel</button>
-              <button class="px-4 py-2 rounded-lg bg-indigo-600 text-white">Save</button>
-            </div>
           </div>
+        </section>
 
-          <!-- Static search/filter toolbar -->
-          <div class="bg-white border border-gray-200 rounded-xl p-4 space-y-4">
-            <div class="flex gap-2">
-              <input type="text" class="w-full rounded-lg border-gray-300 focus:border-indigo-500 focus:ring-indigo-500" placeholder="Search…">
-              <button class="px-4 py-2 rounded-lg bg-white border border-gray-200">Filter</button>
-              <button class="px-4 py-2 rounded-lg bg-white border border-gray-200">Export</button>
-            </div>
-            <div class="text-sm text-gray-500">Filters and export will be wired up with Alpine later.</div>
+        <!-- Drawer (static) -->
+        <section id="drawers" class="scroll-mt-24">
+          <h2 class="text-lg font-semibold mb-4">Drawer (static)</h2>
+          <div class="text-sm text-gray-600 mb-2">
+            Right-side drawer hidden by default.
           </div>
-        </div>
-      </section>
-
-      <!-- Tabs (static) -->
-      <section id="tabs" class="scroll-mt-24">
-        <h2 class="text-lg font-semibold mb-4">Tabs (static)</h2>
-        <div class="bg-white border border-gray-200 rounded-xl">
-          <div class="flex gap-2 border-b border-gray-200 p-2">
-            <button class="px-3 py-2 rounded-lg bg-gray-100 text-sm">General</button>
-            <button class="px-3 py-2 rounded-lg hover:bg-gray-50 text-sm">Security</button>
-            <button class="px-3 py-2 rounded-lg hover:bg-gray-50 text-sm">Billing</button>
-          </div>
-          <div class="p-4 text-sm text-gray-600">Tab panels will switch via Alpine later.</div>
-        </div>
-      </section>
-
-      <!-- Dropdown (static) -->
-      <section id="dropdown" class="scroll-mt-24">
-        <h2 class="text-lg font-semibold mb-4">Dropdown (static)</h2>
-        <div class="relative inline-block">
-          <button class="px-4 py-2 rounded-lg bg-white border border-gray-200">Open menu</button>
-          <div class="absolute mt-2 w-48 rounded-lg border border-gray-200 bg-white shadow hidden-important">
-            <a class="block px-3 py-2 text-sm hover:bg-gray-50" href="#">Profile</a>
-            <a class="block px-3 py-2 text-sm hover:bg-gray-50" href="#">Settings</a>
-            <a class="block px-3 py-2 text-sm hover:bg-gray-50 text-rose-600" href="#">Sign out</a>
-          </div>
-        </div>
-      </section>
-
-      <!-- Cards -->
-      <section id="cards" class="scroll-mt-24">
-        <h2 class="text-lg font-semibold mb-4">Cards</h2>
-        <div class="grid sm:grid-cols-2 lg:grid-cols-3 gap-6">
-          <div class="bg-white border border-gray-200 rounded-xl p-4">
-            <div class="text-sm text-gray-500">Revenue</div>
-            <div class="mt-2 text-2xl font-semibold">$12,340</div>
-            <div class="mt-3 text-xs text-emerald-600">+8.4% from last week</div>
-          </div>
-          <div class="bg-white border border-gray-200 rounded-xl p-4">
-            <div class="text-sm text-gray-500">Users</div>
-            <div class="mt-2 text-2xl font-semibold">1,284</div>
-            <div class="mt-3 text-xs text-gray-500">Active users in last 24h</div>
-          </div>
-          <div class="bg-white border border-gray-200 rounded-xl p-4">
-            <div class="text-sm text-gray-500">Conversion</div>
-            <div class="mt-2 text-2xl font-semibold">3.9%</div>
-            <div class="mt-3 text-xs text-rose-600">-0.4% from last week</div>
-          </div>
-        </div>
-      </section>
-
-      <!-- Table -->
-      <section id="table" class="scroll-mt-24">
-        <h2 class="text-lg font-semibold mb-4">Table</h2>
-        <div class="bg-white border border-gray-200 rounded-xl overflow-hidden">
-          <table class="min-w-full text-sm">
-            <thead class="bg-gray-50 text-gray-600">
-              <tr>
-                <th class="px-4 py-2 text-left font-medium">Name</th>
-                <th class="px-4 py-2 text-left font-medium">Email</th>
-                <th class="px-4 py-2 text-left font-medium">Role</th>
-                <th class="px-4 py-2 text-left font-medium">Status</th>
-                <th class="px-4 py-2"></th>
-              </tr>
-            </thead>
-            <tbody class="divide-y divide-gray-100">
-              <tr>
-                <td class="px-4 py-2">Jane Doe</td>
-                <td class="px-4 py-2">jane@example.com</td>
-                <td class="px-4 py-2">Admin</td>
-                <td class="px-4 py-2"><span class="inline-flex items-center px-2 py-0.5 rounded-full bg-emerald-100 text-emerald-700 text-xs">Active</span></td>
-                <td class="px-4 py-2 text-right"><button class="px-3 py-1.5 rounded-lg bg-white border border-gray-200">View</button></td>
-              </tr>
-              <tr>
-                <td class="px-4 py-2">John Smith</td>
-                <td class="px-4 py-2">john@example.com</td>
-                <td class="px-4 py-2">User</td>
-                <td class="px-4 py-2"><span class="inline-flex items-center px-2 py-0.5 rounded-full bg-amber-100 text-amber-700 text-xs">Pending</span></td>
-                <td class="px-4 py-2 text-right"><button class="px-3 py-1.5 rounded-lg bg-white border border-gray-200">View</button></td>
-              </tr>
-            </tbody>
-          </table>
-        </div>
-      </section>
-
-      <!-- Alerts -->
-      <section id="alerts" class="scroll-mt-24">
-        <h2 class="text-lg font-semibold mb-4">Alerts</h2>
-        <div class="space-y-3">
-          <div class="rounded-lg border border-emerald-200 bg-emerald-50 px-4 py-3 text-emerald-800">Success alert</div>
-          <div class="rounded-lg border border-amber-200 bg-amber-50 px-4 py-3 text-amber-800">Warning alert</div>
-          <div class="rounded-lg border border-rose-200 bg-rose-50 px-4 py-3 text-rose-800">Error alert</div>
-          <div class="rounded-lg border border-blue-200 bg-blue-50 px-4 py-3 text-blue-800">Info alert</div>
-        </div>
-      </section>
-
-      <!-- Toast Container (static placeholder) -->
-      <section id="toasts" class="scroll-mt-24">
-        <h2 class="text-lg font-semibold mb-4">Toast Area (static)</h2>
-        <div class="text-sm text-gray-600 mb-2">This fixed container will receive toasts later via Alpine events.</div>
-        <div class="fixed bottom-4 right-4 space-y-2 w-80 pointer-events-none">
-          <!-- Example toast (static) -->
-          <div class="pointer-events-auto rounded-lg border border-gray-200 bg-white shadow p-3">
-            <div class="text-sm font-medium">Saved successfully</div>
-            <div class="text-xs text-gray-500 mt-1">We’ll dismiss this automatically with Alpine later.</div>
-          </div>
-        </div>
-      </section>
-
-      <!-- Skeletons -->
-      <section id="skeletons" class="scroll-mt-24">
-        <h2 class="text-lg font-semibold mb-4">Skeletons</h2>
-        <div class="grid sm:grid-cols-2 lg:grid-cols-3 gap-6">
-          <div class="rounded-xl border border-gray-200 p-4">
-            <div class="h-4 w-24 skeleton rounded"></div>
-            <div class="mt-3 h-7 w-32 skeleton rounded"></div>
-            <div class="mt-4 space-y-2">
-              <div class="h-3 w-full skeleton rounded"></div>
-              <div class="h-3 w-5/6 skeleton rounded"></div>
-              <div class="h-3 w-4/6 skeleton rounded"></div>
-            </div>
-          </div>
-          <div class="rounded-xl border border-gray-200 p-4">
-            <div class="h-4 w-20 skeleton rounded"></div>
-            <div class="mt-3 h-40 w-full skeleton rounded"></div>
-          </div>
-          <div class="rounded-xl border border-gray-200 p-4">
-            <div class="h-4 w-14 skeleton rounded"></div>
-            <div class="mt-3 h-3 w-4/6 skeleton rounded"></div>
-            <div class="mt-2 h-3 w-5/6 skeleton rounded"></div>
-            <div class="mt-2 h-3 w-3/6 skeleton rounded"></div>
-          </div>
-        </div>
-      </section>
-
-      <!-- Accordions (static) -->
-      <section id="accordions" class="scroll-mt-24">
-        <h2 class="text-lg font-semibold mb-4">Accordions (static)</h2>
-        <div class="bg-white border border-gray-200 rounded-xl divide-y divide-gray-200">
-          <details class="group p-4">
-            <summary class="cursor-pointer list-none flex items-center justify-between">
-              <span class="font-medium">What is this course?</span>
-              <span class="text-gray-400 group-open:rotate-180 transition">▾</span>
-            </summary>
-            <div class="mt-2 text-sm text-gray-600">A project-based deep dive into Alpine.js over Tailwind markup.</div>
-          </details>
-          <details class="group p-4">
-            <summary class="cursor-pointer list-none flex items-center justify-between">
-              <span class="font-medium">Do I need a build step?</span>
-              <span class="text-gray-400 group-open:rotate-180 transition">▾</span>
-            </summary>
-            <div class="mt-2 text-sm text-gray-600">No. We begin with CDN for speed, then you can adopt a build later.</div>
-          </details>
-        </div>
-      </section>
-
-      <!-- Breadcrumbs -->
-      <section id="breadcrumbs" class="scroll-mt-24">
-        <h2 class="text-lg font-semibold mb-4">Breadcrumbs</h2>
-        <nav class="text-sm">
-          <ol class="flex items-center gap-1 text-gray-600">
-            <li><a href="#" class="hover:text-indigo-600">Home</a></li>
-            <li>›</li>
-            <li><a href="#" class="hover:text-indigo-600">Library</a></li>
-            <li>›</li>
-            <li class="text-gray-900">Data</li>
-          </ol>
-        </nav>
-      </section>
-
-      <!-- Modals (static) -->
-      <section id="modals" class="scroll-mt-24">
-        <h2 class="text-lg font-semibold mb-4">Modal (static)</h2>
-        <div class="text-sm text-gray-600 mb-2">Hidden by default; will be toggled later with Alpine.</div>
-        <!-- Overlay + Dialog: initially hidden via .hidden-important -->
-        <div class="fixed inset-0 z-50 hidden-important" aria-hidden="true">
-          <div class="absolute inset-0 bg-black/40"></div>
-          <div class="absolute inset-0 flex items-center justify-center p-4">
-            <div class="w-full max-w-lg rounded-xl bg-white shadow border border-gray-200 p-4">
-              <h3 class="text-lg font-semibold">Example Modal</h3>
-              <p class="text-sm text-gray-600 mt-1">We’ll wire open/close and focus trapping with Alpine.</p>
-              <div class="mt-4 flex justify-end gap-2">
-                <button class="px-4 py-2 rounded-lg bg-white border border-gray-200">Cancel</button>
-                <button class="px-4 py-2 rounded-lg bg-indigo-600 text-white">Confirm</button>
+          <div
+            class="fixed inset-y-0 right-0 w-96 max-w-full bg-white border-l border-gray-200 shadow hidden-important"
+            aria-hidden="true"
+          >
+            <div class="h-full flex flex-col">
+              <div
+                class="p-4 border-b border-gray-200 flex items-center justify-between"
+              >
+                <h3 class="font-semibold">Details</h3>
+                <button
+                  class="px-3 py-1.5 rounded-lg bg-white border border-gray-200"
+                >
+                  Close
+                </button>
+              </div>
+              <div class="p-4 text-sm text-gray-600">
+                Drawer content goes here. We’ll animate and toggle via Alpine
+                later.
               </div>
             </div>
           </div>
-        </div>
-      </section>
-
-      <!-- Drawer (static) -->
-      <section id="drawers" class="scroll-mt-24">
-        <h2 class="text-lg font-semibold mb-4">Drawer (static)</h2>
-        <div class="text-sm text-gray-600 mb-2">Right-side drawer hidden by default.</div>
-        <div class="fixed inset-y-0 right-0 w-96 max-w-full bg-white border-l border-gray-200 shadow hidden-important" aria-hidden="true">
-          <div class="h-full flex flex-col">
-            <div class="p-4 border-b border-gray-200 flex items-center justify-between">
-              <h3 class="font-semibold">Details</h3>
-              <button class="px-3 py-1.5 rounded-lg bg-white border border-gray-200">Close</button>
-            </div>
-            <div class="p-4 text-sm text-gray-600">
-              Drawer content goes here. We’ll animate and toggle via Alpine later.
-            </div>
-          </div>
-        </div>
-      </section>
-    </main>
-  </div>
-
-  <footer class="mt-16 border-t border-gray-200">
-    <div class="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 py-8 text-sm text-gray-500">
-      © 2025 Alpine Advanced Course — Tailwind-only templates
+        </section>
+      </main>
     </div>
-  </footer>
-</body>
+
+    <footer class="mt-16 border-t border-gray-200">
+      <div
+        class="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 py-8 text-sm text-gray-500"
+      >
+        © 2025 Alpine Advanced Course — Tailwind-only templates
+      </div>
+    </footer>
+  </body>
 </html>
