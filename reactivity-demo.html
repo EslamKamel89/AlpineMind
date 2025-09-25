@@ -1,0 +1,216 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Reactivity-demo</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+      .skeleton {
+        position: relative;
+        overflow: hidden;
+        background: rgb(229 231 235);
+      }
+      .skeleton::after {
+        content: "";
+        position: absolute;
+        inset: 0;
+        transform: translateX(-100%);
+        background: linear-gradient(
+          90deg,
+          rgba(229, 231, 235, 0) 0%,
+          rgba(156, 163, 175, 0.25) 50%,
+          rgba(229, 231, 235, 0) 100%
+        );
+        animation: shimmer 1.6s infinite;
+      }
+      @keyframes shimmer {
+        100% {
+          transform: translateX(100%);
+        }
+      }
+      /* Hide elements meant to be initialized later (e.g., dialog) */
+      .hidden-important {
+        display: none !important;
+      }
+    </style>
+    <script
+      defer
+      src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js"
+    ></script>
+  </head>
+  <body class="min-h-screen bg-gray-50 text-gray-900">
+    <header
+      class="sticky top-0 z-40 bg-white/80 backdrop-blur border-b border-gray-200"
+    >
+      <div
+        class="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 h-16 flex items-center justify-between"
+      >
+        <div class="flex items-center gap-2">
+          <div class="h-8 w-8 rounded-lg bg-indigo-600"></div>
+          <span class="font-semibold">Alpine Advanced — UI Kit</span>
+        </div>
+        <nav class="hidden md:flex items-center gap-6 text-sm">
+          <a href="#forms" class="hover:text-indigo-600">Forms</a>
+          <a href="#navigation" class="hover:text-indigo-600">Navigation</a>
+          <a href="#feedback" class="hover:text-indigo-600">Feedback</a>
+          <a href="#data" class="hover:text-indigo-600">Data</a>
+          <a href="#overlays" class="hover:text-indigo-600">Overlays</a>
+        </nav>
+        <div class="flex items-center gap-2">
+          <button
+            class="inline-flex items-center gap-2 rounded-lg border border-gray-200 px-3 py-1.5 text-sm hover:bg-gray-100"
+          >
+            <span class="i">🌙</span><span>Theme</span>
+          </button>
+          <img
+            alt="avatar"
+            class="h-8 w-8 rounded-full ring-2 ring-white"
+            src="https://avatars.githubusercontent.com/u/9919?s=80&v=4"
+          />
+        </div>
+      </div>
+    </header>
+    <div
+      class="mx-auto max-w-7xl grid grid-cols-1 lg:grid-cols-[16rem,1fr] gap-6 px-4 sm:px-6 lg:px-8 mt-6"
+    >
+      <!-- Sidebar -->
+      <aside class="bg-white border border-gray-200 rounded-xl p-4 h-fit">
+        <h2 class="text-sm font-semibold text-gray-700 mb-3">Components</h2>
+        <ul class="space-y-1 text-sm">
+          <li>
+            <a class="block rounded px-2 py-1 hover:bg-gray-100" href="#buttons"
+              >Buttons</a
+            >
+          </li>
+          <li>
+            <a class="block rounded px-2 py-1 hover:bg-gray-100" href="#forms"
+              >Forms</a
+            >
+          </li>
+          <li>
+            <a class="block rounded px-2 py-1 hover:bg-gray-100" href="#tabs"
+              >Tabs</a
+            >
+          </li>
+          <li>
+            <a
+              class="block rounded px-2 py-1 hover:bg-gray-100"
+              href="#dropdown"
+              >Dropdown</a
+            >
+          </li>
+          <li>
+            <a class="block rounded px-2 py-1 hover:bg-gray-100" href="#cards"
+              >Cards</a
+            >
+          </li>
+          <li>
+            <a class="block rounded px-2 py-1 hover:bg-gray-100" href="#table"
+              >Table</a
+            >
+          </li>
+          <li>
+            <a class="block rounded px-2 py-1 hover:bg-gray-100" href="#alerts"
+              >Alerts</a
+            >
+          </li>
+          <li>
+            <a class="block rounded px-2 py-1 hover:bg-gray-100" href="#toasts"
+              >Toast Area</a
+            >
+          </li>
+          <li>
+            <a
+              class="block rounded px-2 py-1 hover:bg-gray-100"
+              href="#skeletons"
+              >Skeletons</a
+            >
+          </li>
+          <li>
+            <a
+              class="block rounded px-2 py-1 hover:bg-gray-100"
+              href="#accordions"
+              >Accordions</a
+            >
+          </li>
+          <li>
+            <a
+              class="block rounded px-2 py-1 hover:bg-gray-100"
+              href="#breadcrumbs"
+              >Breadcrumbs</a
+            >
+          </li>
+          <li>
+            <a class="block rounded px-2 py-1 hover:bg-gray-100" href="#modals"
+              >Modal (static)</a
+            >
+          </li>
+          <li>
+            <a class="block rounded px-2 py-1 hover:bg-gray-100" href="#drawers"
+              >Drawer (static)</a
+            >
+          </li>
+        </ul>
+      </aside>
+      <main class="space-y-12 pb-20">
+        <section id="reactivity-demo" class="scroll-mt-24">
+          <h2 class="text-lg font-semibold mb-4">Reactivity Tools Demo</h2>
+          <div
+            x-data="formComponent()"
+            x-effect=" document.title = name ? name : 'Alpine master'"
+            class="bg-white border border-gray-200 rounded-xl p-4 space-y-4"
+          >
+            <!-- Normal input with watcher + effect -->
+            <div>
+              <label class="block text-sm font-medium mb-1">Name</label>
+              <input
+                type="text"
+                x-model="name"
+                placeholder="Type your name"
+                class="w-full border rounded px-2 py-1"
+              />
+              <p class="text-xs text-gray-500">
+                Console logs whenever name changes (via $watch).
+              </p>
+            </div>
+            <div>
+              <button
+                @click="highlight = true ;$nextTick(()=>$refs.nameInput.focus())"
+                class="px-4 py-2 bg-indigo-600 text-white rounded"
+              >
+                Focus & highlight input
+              </button>
+              <input
+                class="w-full border rounded px-2 py-1 mt-2"
+                x-ref="nameInput"
+                :class="highlight ? '!border-rose-500' : '!border-gray-300'"
+                @blur="highlight = false"
+                placeholder="Watch me highlight"
+              />
+            </div>
+          </div>
+        </section>
+        <script>
+          function formComponent() {
+            return {
+              name: "",
+              highlight: false,
+              init() {
+                this.$watch("name", (val) => console.log(val));
+              },
+            };
+          }
+        </script>
+      </main>
+    </div>
+
+    <footer class="mt-16 border-t border-gray-200">
+      <div
+        class="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 py-8 text-sm text-gray-500"
+      >
+        © 2025 Alpine Advanced Course — Tailwind-only templates
+      </div>
+    </footer>
+  </body>
+</html>
