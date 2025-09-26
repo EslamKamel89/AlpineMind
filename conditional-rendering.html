@@ -3,7 +3,7 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Events</title>
+    <title>Conditional rendering</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <style>
       .skeleton {
@@ -38,6 +38,11 @@
       defer
       src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js"
     ></script>
+    <style>
+      [x-cloak] {
+        display: none !important;
+      }
+    </style>
   </head>
 
   <body class="min-h-screen bg-gray-50 text-gray-900">
@@ -46,7 +51,50 @@
       class="mx-auto max-w-7xl grid grid-cols-1 lg:grid-cols-[16rem,1fr] gap-6 px-4 sm:px-6 lg:px-8 mt-6"
     >
       <div id="aside"></div>
-      <main class="space-y-12 pb-20"></main>
+      <section class="space-y-12 pb-20" x-data="{show:false }">
+        <button
+          class="px-4 py-2 rounded-lg bg-amber-500 text-white hover:bg-amber-600"
+          @click="show = !show"
+        >
+          Toggle
+        </button>
+        <div x-show="show">
+          <div x-data="{count:0}">
+            <button
+              class="px-4 py-2 rounded-lg bg-indigo-600 text-white hover:bg-indigo-700"
+              @click="count++"
+            >
+              <div>Count: <span x-text="count"></span></div>
+            </button>
+          </div>
+        </div>
+        <template x-if="show">
+          <div x-data="{count:0}">
+            <button
+              class="px-4 py-2 rounded-lg bg-indigo-600 text-white hover:bg-indigo-700"
+              @click="count++"
+            >
+              <div>Count: <span x-text="count"></span></div>
+            </button>
+          </div>
+        </template>
+      </section>
+      <section id="conditional-demo" class="scroll-mt-24">
+        <h2 class="text-lg font-semibold mb-4">Conditional Rendering Demo</h2>
+        <div
+          x-data="{openIf :false , openShow:false}"
+          class="space-y-6 bg-white border border-gray-200 rounded-xl p-4"
+        >
+          <div>
+            <button
+              @click="showIf = !showIf"
+              class="px-3 py-1 bg-indigo-600 text-white rounded"
+            >
+              Toggle with x-if
+            </button>
+          </div>
+        </div>
+      </section>
     </div>
     <div id="footer"></div>
     <script>
