@@ -1,0 +1,135 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Shopping cart</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+      .skeleton {
+        position: relative;
+        overflow: hidden;
+        background: rgb(229 231 235);
+      }
+      .skeleton::after {
+        content: "";
+        position: absolute;
+        inset: 0;
+        transform: translateX(-100%);
+        background: linear-gradient(
+          90deg,
+          rgba(229, 231, 235, 0) 0%,
+          rgba(156, 163, 175, 0.25) 50%,
+          rgba(229, 231, 235, 0) 100%
+        );
+        animation: shimmer 1.6s infinite;
+      }
+      @keyframes shimmer {
+        100% {
+          transform: translateX(100%);
+        }
+      }
+      /* Hide elements meant to be initialized later (e.g., dialog) */
+      .hidden-important {
+        display: none !important;
+      }
+    </style>
+    <script
+      defer
+      src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js"
+    ></script>
+    <style>
+      [x-cloak] {
+        display: none !important;
+      }
+    </style>
+  </head>
+
+  <body class="min-h-screen bg-gray-50 text-gray-900">
+    <div id="header"></div>
+    <div
+      class="mx-auto max-w-7xl grid grid-cols-1 lg:grid-cols-[16rem,1fr] gap-6 px-4 sm:px-6 lg:px-8 mt-6"
+    >
+      <div id="aside"></div>
+      <section id="cart-demo" class="scroll-mt-24">
+        <h2 class="text-lg font-semibold mb-4">Global Cart Store Demo</h2>
+        <div class="flex items-center gap-2 mb-6">
+          <span class="text-2xl">🛒</span>
+          <span class="font-bold">Items in cart:</span>
+          <span
+            class="text-indigo-600 font-semibold"
+            x-data
+            x-text="$store.cart.count"
+            >0</span
+          >
+        </div>
+        <div class="grid grid-cols-2 gap-4">
+          <div class="p-4 border rounded-xl">
+            <h3 class="font-medium">Product A</h3>
+            <p class="text-sm text-gray-500">Nice item</p>
+            <button
+              x-data
+              @click="$store.cart.add()"
+              class="mt-2 px-3 py-1 bg-indigo-600 text-white rounded"
+            >
+              Add to Cart
+            </button>
+          </div>
+          <div class="p-4 border rounded-xl">
+            <h3 class="font-medium">Product B</h3>
+            <p class="text-sm text-gray-500">Another item</p>
+            <button
+              x-data
+              @click="$store.cart.add()"
+              class="mt-2 px-3 py-1 bg-indigo-600 text-white rounded"
+            >
+              Add to Cart
+            </button>
+          </div>
+          <div class="p-4 border rounded-xl">
+            <h3 class="font-medium">Product C</h3>
+            <p class="text-sm text-gray-500">Cool item</p>
+            <button
+              x-data
+              @click="$store.cart.add()"
+              class="mt-2 px-3 py-1 bg-indigo-600 text-white rounded"
+            >
+              Add to Cart
+            </button>
+          </div>
+          <div class="p-4 border rounded-xl">
+            <h3 class="font-medium">Product D</h3>
+            <p class="text-sm text-gray-500">Popular item</p>
+            <button
+              x-data
+              @click="$store.cart.add()"
+              class="mt-2 px-3 py-1 bg-indigo-600 text-white rounded"
+            >
+              Add to Cart
+            </button>
+          </div>
+        </div>
+      </section>
+    </div>
+    <div id="footer"></div>
+    <script>
+      document.addEventListener("alpine:init", () => {
+        Alpine.store("cart", {
+          count: 0,
+          add() {
+            this.count++;
+          },
+          remove() {
+            if (this.count > 0) {
+              this.count--;
+            }
+          },
+          clear() {
+            this.count = 0;
+          },
+        });
+      });
+    </script>
+    <script src="/js/load.js"></script>
+  </body>
+</html>

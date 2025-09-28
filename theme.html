@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Theme Switcher</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+      .skeleton {
+        position: relative;
+        overflow: hidden;
+        background: rgb(229 231 235);
+      }
+      .skeleton::after {
+        content: "";
+        position: absolute;
+        inset: 0;
+        transform: translateX(-100%);
+        background: linear-gradient(
+          90deg,
+          rgba(229, 231, 235, 0) 0%,
+          rgba(156, 163, 175, 0.25) 50%,
+          rgba(229, 231, 235, 0) 100%
+        );
+        animation: shimmer 1.6s infinite;
+      }
+      @keyframes shimmer {
+        100% {
+          transform: translateX(100%);
+        }
+      }
+      /* Hide elements meant to be initialized later (e.g., dialog) */
+      .hidden-important {
+        display: none !important;
+      }
+    </style>
+    <script
+      defer
+      src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js"
+    ></script>
+    <style>
+      [x-cloak] {
+        display: none !important;
+      }
+    </style>
+  </head>
+
+  <body class="min-h-screen bg-gray-50 text-gray-900">
+    <div id="header"></div>
+    <div
+      class="mx-auto max-w-7xl grid grid-cols-1 lg:grid-cols-[16rem,1fr] gap-6 px-4 sm:px-6 lg:px-8 mt-6"
+    >
+      <div id="aside"></div>
+      <section id="theme-switcher" class="scroll-mt-24" x-data>
+        <h2 class="text-lg font-semibold mb-4">Theme Switcher Project</h2>
+        <div class="mb-4">
+          <button
+            @click="$store.theme.toggle()"
+            class="px-4 py-2 bg-indigo-600 text-white rounded"
+          >
+            Toggle Theme
+          </button>
+        </div>
+        <div
+          :class="$store.theme.dark ? 'bg-gray-900 text-white' : 'bg-gray-100 text-gray-900'"
+          class="ounded-xl p-6 space-y-4 transition-colors"
+        >
+          <div :class="$store.theme.card()">
+            <h3 class="font-medium">Card A</h3>
+            <p>This card updates with the theme.</p>
+          </div>
+          <div :class="$store.theme.card()">
+            <h3 class="font-medium">Card B</h3>
+            <p>Reusable binding keeps code clean.</p>
+          </div>
+          <div x-bind="card">
+            <h3 class="font-medium">Card A</h3>
+            <p>This card updates with the theme.</p>
+          </div>
+          <div x-bind="card">
+            <h3 class="font-medium">Card B</h3>
+            <p>Reusable binding keeps code clean.</p>
+          </div>
+        </div>
+      </section>
+    </div>
+    <div id="footer"></div>
+
+    <script>
+      document.addEventListener("alpine:init", () => {
+        Alpine.store("theme", {
+          dark: true,
+          toggle() {
+            this.dark = !this.dark;
+          },
+          card() {
+            return this.dark
+              ? "bg-gray-800 text-white p-4 rounded-xl shadow transition-colors"
+              : "bg-white text-gray-900 p-4 rounded-xl shadow transition-colors";
+          },
+        });
+        Alpine.bind("card", {
+          ":class"() {
+            return this.$store.theme.dark
+              ? "bg-gray-800 text-white p-4 rounded-xl shadow transition-colors"
+              : "bg-white text-gray-900 p-4 rounded-xl shadow transition-colors";
+          },
+        });
+      });
+      function pr(value, title = "") {
+        console.log(value);
+        return value;
+      }
+    </script>
+    <script src="/js/load.js"></script>
+  </body>
+</html>
